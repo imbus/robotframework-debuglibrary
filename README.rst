@@ -53,7 +53,7 @@ Installation
 
 To install using ``pip``::
 
-    pip install robotframework-debuglibrary
+    pip install robotframework-debug
 
 NOTICE: 2.0 is not compatible with python 2
 *******************************************
