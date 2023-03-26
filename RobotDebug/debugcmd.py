@@ -30,7 +30,15 @@ def run_robot_command(robot_instance, command):
     """Run command in robotframewrk environment."""
     if not command:
         return
-
+    
+    if command == "cls":
+        if os.name == "nt":
+            os.system("cls")
+            return
+        else:
+            os.system("clear")
+            return
+            
     result = []
     try:
         result = run_command(robot_instance, command)
