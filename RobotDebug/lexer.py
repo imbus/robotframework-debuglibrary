@@ -46,7 +46,7 @@ def get_variable_token(token_list):
         if len(token.value) == 0:
             continue
         try:
-            var_tokens = token.tokenize_variables()
+            var_tokens = list(token.tokenize_variables())
         except Exception:
             var_tokens = [token]
         for v_token in var_tokens:
