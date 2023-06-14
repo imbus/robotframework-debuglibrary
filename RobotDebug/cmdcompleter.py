@@ -215,7 +215,7 @@ class CmdCompleter(Completer):
         cursor_col = document.cursor_position_col
         cursor_row = document.cursor_position_row
         token_list = list(get_robot_token(document.text))
-        statements = list(_tokens_to_statements(token_list))
+        statements = list(_tokens_to_statements(token_list, None))
         statement_info = StatementInformation(cursor_col, cursor_row, statements)
         self.current_statement = statement_info
         statement_type = statement_info.statement_type
