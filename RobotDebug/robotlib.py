@@ -44,7 +44,7 @@ class ImportedResourceDocBuilder(ResourceDocBuilder):
             type="RESOURCE",
             scope="GLOBAL",
         )
-        libdoc.keywords = KeywordDocBuilder().build_keywords(resource)
+        libdoc.keywords = KeywordDocBuilder(resource=True).build_keywords(resource)
         return libdoc
 
 

@@ -44,7 +44,8 @@ class Listener:
 
         path = attrs["source"]
         if path and Path(path).exists() and path not in self.source_files:
-            self.source_files[path] = Path(path).open().readlines()
+            with open(Path(path)) as f:
+                self.source_files[path] = f.readlines()
         lineno = attrs["lineno"]
         self.library.current_source_path = path
         self.library.current_source_line = lineno
