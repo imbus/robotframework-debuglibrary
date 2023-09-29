@@ -23,12 +23,12 @@ def find_version(*file_paths):
 
 
 setup(
-    name="robotframework-debug",
+    name="robotframework-debug-dk",
     version=find_version("RobotDebug/version.py"),
-    description="RobotFramework debug shell",
+    description="RobotFramework debug shell originally implemented by René Rohner and modified by Maciej Banakiewicz",
     long_description=read("README.rst"),
     long_description_content_type=("text/x-rst"),
-    author="René Rohner",
+    author="René Rohner (modified by Maciej Banakiewicz)",
     author_email="snooz@postoe.de",
     license="New BSD",
     packages=["RobotDebug"],
@@ -39,7 +39,7 @@ setup(
         ],
     },
     zip_safe=False,
-    url="https://github.com/imbus/robotframework-debug/",
+    url="https://github.com/maciejbanakiewicz93/robotframework-debug/",
     keywords="robotframework,debug,shell,repl",
     install_requires=[
         "prompt-toolkit >= 3.0.38",
