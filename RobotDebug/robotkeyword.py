@@ -6,7 +6,12 @@ from typing import Iterator, List, Tuple
 from robot.libdocpkg.model import KeywordDoc, LibraryDoc
 from robot.libraries.BuiltIn import BuiltIn
 from robot.parsing import get_model
-from robot.running import TestSuite, UserLibrary
+from robot.running import TestSuite
+
+try:
+    from robot.running import UserLibrary as ResourceFile
+except ImportError:
+    from robot.running import ResourceFile
 from robot.variables.search import is_variable
 
 from .robotlib import ImportedLibraryDocBuilder, ImportedResourceDocBuilder, get_libs
@@ -38,7 +43,7 @@ def parse_keyword(command) -> Tuple[List[str], str, List[str]]:
 def get_lib_keywords(library) -> List[KeywordDoc]:
     """Get keywords of imported library."""
     if library.name not in _lib_keywords_cache:
-        if isinstance(library, UserLibrary):
+        if isinstance(library, ResourceFile):
             _lib_keywords_cache[library.name]: LibraryDoc = ImportedResourceDocBuilder().build(
                 library
             )

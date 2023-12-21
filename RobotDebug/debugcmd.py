@@ -10,6 +10,7 @@ from robot.errors import ExecutionFailed, HandlerExecutionFailed
 from robot.libraries.BuiltIn import BuiltIn
 from robot.running.signalhandler import STOP_SIGNAL_MONITOR
 from robot.variables import is_variable
+from robot.version import get_version
 
 from .cmdcompleter import CmdCompleter, KeywordAutoSuggestion
 from .globals import context
@@ -46,6 +47,8 @@ from .styles import (
 )
 
 HISTORY_PATH = os.environ.get("RFDEBUG_HISTORY", "~/.rfdebug_history")
+
+IS_RF_7 = int(get_version().split(".", 1)) >= 7
 
 
 class ReplCmd(PromptToolkitCmd):
@@ -288,13 +291,13 @@ def run_command(dbg_cmd, command: str) -> List[Tuple[str, str]]:
     if len(test.body) > 1:
         start = time.monotonic()
         for kw in test.body:
-            kw.run(ctx)
+            run_keyword(kw, ctx)
         dbg_cmd.last_keyword_exec_time = time.monotonic() - start
         return_val = None
     else:
         kw = test.body[0]
         start = time.monotonic()
-        return_val = kw.run(ctx)
+        return_val = run_keyword(kw, ctx)
         dbg_cmd.last_keyword_exec_time = time.monotonic() - start
     assign = set(_get_assignments(test))
     if not assign and return_val is not None:
@@ -307,3 +310,10 @@ def run_command(dbg_cmd, command: str) -> List[Tuple[str, str]]:
             output.append(("#", f"{pure_var} = {val!r}"))
         return output
     return []
+
+
+def run_keyword(keyword, context):
+    if IS_RF_7 and context.steps:
+        data, result = context.steps[-1]
+        return keyword.run(result, context)
+    return keyword.run(context)

@@ -310,10 +310,9 @@ class BaseCmd(cmd.Cmd):
 
         line = self.precmd(line)
         stop = self.onecmd(line)
-        stop = self.postcmd(stop, line)
+        return self.postcmd(stop, line)
 
         # do not run 'EOF' command to avoid override 'lastcmd'
-        return stop
 
     def cmdloop(self, intro=None):
         """Better command loop.

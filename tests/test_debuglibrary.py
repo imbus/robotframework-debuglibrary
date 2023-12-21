@@ -153,7 +153,7 @@ def step_functional_testing():
         check_command("", "=> BuiltIn.Log To Console  another test case")  # repeat last command
 
     # Exit the debug mode started by Debug keyword.
-    check_command("c", "Exit shell.*" "another test case.*" "end")  # continue
+    check_command("c", "Exit shell.*another test case.*end")  # continue
     # Exit the interactive shell started by "DebugLibrary/shell.py".
     check_command("c", "Report: ")
     child.wait()

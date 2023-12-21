@@ -1,6 +1,6 @@
 [tool.black]
 target-version = ['py37']
-line-length = 120
+line-length = 100
 
 [tool.ruff]
 unfixable = []
