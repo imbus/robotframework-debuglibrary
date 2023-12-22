@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 
-import os
 import re
+from pathlib import Path
 
 from setuptools import setup
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
 
-
-def read(*names, **kwargs):
-    with open(os.path.join(ROOT, *names), encoding=kwargs.get("encoding", "utf8")) as fp:
-        return fp.read()
-
-
-def find_version(*file_paths):
-    version_file = read(*file_paths)
+def find_version(file_paths):
+    version_file = Path(file_paths).read_text()
     version_match = re.search(r"^VERSION = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
@@ -25,7 +18,7 @@ setup(
     name="robotframework-debug",
     version=find_version("RobotDebug/version.py"),
     description="RobotFramework debug shell",
-    long_description=read("README.rst"),
+    long_description=Path("README.rst").read_text(),
     long_description_content_type=("text/x-rst"),
     author="René Rohner",
     author_email="snooz@postoe.de",
@@ -42,7 +35,7 @@ setup(
     keywords="robotframework,debug,shell,repl",
     install_requires=[
         "prompt-toolkit >= 3.0.38",
-        "robotframework >= 5.0",
+        "robotframework >= 5.0, < 8.0",
         "pygments >= 2.14.0",
         "pyperclip >= 1.8.2",
     ],
@@ -62,6 +55,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Utilities",
     ],
 )

@@ -8,6 +8,7 @@ from prompt_toolkit.document import Document
 from robot.libraries.BuiltIn import BuiltIn
 from robot.parsing.parser.parser import _tokens_to_statements
 
+from .globals import IS_RF_7
 from .lexer import get_robot_token, get_variable_token
 from .prompttoolkitcmd import PromptToolkitCmd
 from .robotkeyword import normalize_kw
@@ -68,7 +69,9 @@ class StatementInformation:
 
     def _find_token_at_cursor(self):
         for token in self.statement.tokens:
-            if token.type in ["KEYWORD", "IF", "FOR", "ELSE", "ELSE IF"]:
+            if (
+                token.type
+            ):  # in ["KEYWORD", "IF", "FOR", "ELSE", "ELSE IF"]:   TODO: Commented to get all tokens in debug. lets see the impact
                 self.statement_type = token.type
             if (
                 token.lineno == self.cursor_row + 1
@@ -222,9 +225,10 @@ class CmdCompleter(Completer):
         previous_token = statement_info.previous_token
         token = statement_info.token
         cursor_pos = statement_info.cursor_pos
-
-        # variables, keyword, args = parse_keyword(text.strip())
-        if "FOR".startswith(text):
+        self.cmd_repl.set_toolbar_key(statement_type, token, cursor_pos)
+        if text == "":
+            yield from []
+        elif "FOR".startswith(text):
             yield from [
                 Completion(
                     "FOR    ${var}    IN    @{list}\n    Log    ${var}\nEND",
@@ -261,40 +265,97 @@ class CmdCompleter(Completer):
                     display_meta="If-Statement as multi line",
                 ),
             ]
+        elif "WHILE".startswith(text):
+            yield from [
+                Completion(
+                    "WHILE    <py-eval>\n    Log    body\nEND",
+                    -len(text),
+                    display="WHILE loop",
+                    display_meta="While-Loop",
+                ),
+                Completion(
+                    "WHILE    <py-eval>     limit=5    on_limit=pass\n    Log    body\nEND",
+                    -len(text),
+                    display="WHILE loop (with limit)",
+                    display_meta="While-Loop with limit and pass when reached",
+                ),
+            ]
+        elif "TRY".startswith(text):
+            yield from [
+                Completion(
+                    "TRY\n    Some Keyword\nEXCEPT\n    Error Handler\nEND",
+                    -len(text),
+                    display="TRY/EXCEPT Statement",
+                    display_meta="Try/Except that catches any error",
+                ),
+                Completion(
+                    "TRY\n    Some Keyword\nEXCEPT    ValueError: *    type=GLOB    AS   ${error}\n    Log    ${error}",
+                    -len(text),
+                    display="TRY/EXCEPT Statement (specific error)",
+                    display_meta="Try/Except that catches a specific error as ${error}",
+                ),
+            ]
+        elif IS_RF_7 and "VAR".startswith(text):
+            yield from [
+                Completion(
+                    "VAR    ${var}    <value>",
+                    -len(text),
+                    display="VAR (simple)",
+                    display_meta="Variable assignment",
+                ),
+                Completion(
+                    "VAR    ${var}    <value>   scope=Suite",
+                    -len(text),
+                    display="VAR (suite scope)",
+                    display_meta="Suite Variable assignment",
+                ),
+                Completion(
+                    "VAR    ${var}    <value>   <value>     separator=${SPACE}",
+                    -len(text),
+                    display="VAR (multiple values)",
+                    display_meta="Variable assignment concatenate",
+                ),
+            ]
         elif re.fullmatch(r"style {2,}.*", text):
             yield from _get_style_completions(text.lower())
         elif text.startswith("*"):
             yield from self._get_resource_completions(text.lower())
         elif token:
-            for var in list(get_variable_token([token])):
-                if var.col_offset <= cursor_col <= var.end_col_offset:
-                    token = var
-                    cursor_pos = cursor_col - var.col_offset
-            self.cmd_repl.set_toolbar_key(statement_type, token, cursor_pos)
-            if token.type in ["ASSIGN", "VARIABLE"] or (
-                token.type in ["KEYWORD", "ARGUMENT"]
-                and re.fullmatch(r"[$&@]\{[^}]*}?", token.value)
-            ):
-                yield from [
-                    Completion(
-                        f"{var[:-1]}",
-                        -cursor_pos,
-                        display=var,
-                        display_meta=repr(val),
-                    )
-                    for var, val in BuiltIn().get_variables().items()
-                    if normalize_kw(var[1:]).startswith(normalize_kw(token.value[1:cursor_pos]))
-                ]
-            elif token.type == "KEYWORD":
-                yield from self._get_command_completions(token.value.lower())
-            elif cursor_pos == 1 and previous_token and previous_token.type == "KEYWORD":
-                yield from self._get_command_completions(f"{previous_token.value.lower()} ")
-            elif (
-                token.type in ["SEPARATOR", "EOL"]
-                and cursor_pos >= 2
-                and statement_type == "KEYWORD"
-            ):
-                yield from self._get_argument_completer(token.value)
+            yield from self._get_keyword_completions(
+                cursor_col, cursor_pos, previous_token, statement_type, token
+            )
+
+    def _get_keyword_completions(
+        self, cursor_col, cursor_pos, previous_token, statement_type, token
+    ):
+        for var in list(get_variable_token([token])):
+            if var.col_offset <= cursor_col <= var.end_col_offset:
+                token = var
+                cursor_pos = cursor_col - var.col_offset
+        SEPARATOR_SIZE = 2
+        if token.type in ["ASSIGN", "VARIABLE"] or (
+            token.type in ["KEYWORD", "ARGUMENT"] and re.fullmatch(r"[$&@]\{[^}]*}?", token.value)
+        ):
+            yield from [
+                Completion(
+                    f"{var[:-1]}",
+                    -cursor_pos,
+                    display=var,
+                    display_meta=repr(val),
+                )
+                for var, val in BuiltIn().get_variables().items()
+                if normalize_kw(var[1:]).startswith(normalize_kw(token.value[1:cursor_pos]))
+            ]
+        elif token.type == "KEYWORD":
+            yield from self._get_command_completions(token.value.lower())
+        elif cursor_pos == 1 and previous_token and previous_token.type == "KEYWORD":
+            yield from self._get_command_completions(f"{previous_token.value.lower()} ")
+        elif (
+            token.type in ["SEPARATOR", "EOL"]
+            and cursor_pos >= SEPARATOR_SIZE
+            and statement_type == "KEYWORD"
+        ):
+            yield from self._get_argument_completer(token.value)
 
 
 class KeywordAutoSuggestion(AutoSuggest):

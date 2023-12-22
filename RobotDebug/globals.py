@@ -1,5 +1,7 @@
 from enum import Enum
 
+from robot.version import get_version
+
 
 class SingletonContext:
     in_step_mode = False
@@ -20,3 +22,6 @@ class StepMode(str, Enum):
     OUT = "_OUT"
     CONTINUE = "_CONTINUE"
     STOP = "_STOP"
+
+
+IS_RF_7 = int(get_version().split(".", 1)[0]) >= 7  # noqa: PLR2004

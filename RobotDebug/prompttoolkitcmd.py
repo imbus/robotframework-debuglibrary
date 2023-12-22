@@ -428,7 +428,8 @@ Type "help" for more information.\
                 ),
             ]
         )
-        # if self.toolbar_token_tuple[0]:
+        ##   UNCOMMEND FOR DEBUGGING
+        # if self.toolbar_token_tuple:
         #     base.extend(
         #         [
         #             ("class:bottom-toolbar-key", "STATEMENT: "),

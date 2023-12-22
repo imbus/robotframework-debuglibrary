@@ -1,8 +1,9 @@
 import re
 from pathlib import Path
+from typing import ClassVar, Dict, List
 
 from pygments.lexer import Lexer
-from pygments.token import Token
+from pygments.token import Token, _TokenType
 from robot.parsing import get_tokens
 
 
@@ -56,9 +57,9 @@ def get_variable_token(token_list):
 class RobotFrameworkLocalLexer(Lexer):
     name = "RobotFramework"
     url = "http://robotframework.org"
-    aliases = ["robotframework"]
-    filenames = ["*.robot", "*.resource"]
-    mimetypes = ["text/x-robotframework"]
+    aliases: ClassVar[List[str]] = ["robotframework"]
+    filenames: ClassVar[List[str]] = ["*.robot", "*.resource"]
+    mimetypes: ClassVar[List[str]] = ["text/x-robotframework"]
 
     # PYGMENTS_STANDARD_TYPES = {
     #     Token: '',
@@ -152,7 +153,7 @@ class RobotFrameworkLocalLexer(Lexer):
     #     Generic.Traceback: 'gt',
     # }
 
-    ROBOT_TO_PYGMENTS = {
+    ROBOT_TO_PYGMENTS: ClassVar[Dict[str, _TokenType]] = {
         "HEADER": Token.Keyword.Namespace,
         "DEFINITION": Token.Name.Class,
         "SETTING HEADER": Token.Keyword.Namespace,
@@ -206,6 +207,7 @@ class RobotFrameworkLocalLexer(Lexer):
         "CONTINUE": Token.Keyword,
         "BREAK": Token.Keyword,
         "OPTION": Token.Keyword,
+        "VAR": Token.Keyword,
         "SEPARATOR": Token.Punctuation,
         "COMMENT": Token.Comment,
         "CONTINUATION": Token.Operator,

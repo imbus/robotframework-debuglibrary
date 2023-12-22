@@ -109,9 +109,11 @@ def _import_resource_from_string(command):
 def _get_assignments(body_elem):
     if hasattr(body_elem, "assign"):
         yield from body_elem.assign
-    else:
+    elif hasattr(body_elem, "body"):
         for child in body_elem.body:
             yield from _get_assignments(child)
+    elif body_elem.type == "VAR":
+        yield body_elem.name
 
 
 def run_debug_if(condition, *args):

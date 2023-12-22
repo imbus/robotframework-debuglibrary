@@ -6,6 +6,7 @@ line-length = 100
 unfixable = []
 exclude = [
   "__pycache__",
+  "tests/"
 ]
 ignore = [
   "B008",  # do not perform function calls in argument defaults
