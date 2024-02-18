@@ -8,6 +8,8 @@ from prompt_toolkit.styles import merge_styles
 from robot.api import logger
 from robot.errors import ExecutionFailed, HandlerExecutionFailed
 from robot.libraries.BuiltIn import BuiltIn
+from robot.running import Keyword
+from robot.running.context import _ExecutionContext
 from robot.running.signalhandler import STOP_SIGNAL_MONITOR
 from robot.variables import is_variable
 
@@ -100,7 +102,7 @@ Access https://github.com/imbus/robotframework-debug for more details.\
         self.run_robot_command(command)
 
     def run_robot_command(self, command):
-        """Run command in robotframewrk environment."""
+        """Run command in robotframework environment."""
         if not command:
             return
         result = []
@@ -309,8 +311,8 @@ def run_command(dbg_cmd, command: str) -> List[Tuple[str, str]]:
     return []
 
 
-def run_keyword(keyword, context):
-    if IS_RF_7 and context.steps:
-        data, result = context.steps[-1]
-        return keyword.run(result, context)
+def run_keyword(keyword: Keyword, context: _ExecutionContext):
+    if IS_RF_7:
+        test = context.test or context.suite
+        return keyword.run(test, context)
     return keyword.run(context)

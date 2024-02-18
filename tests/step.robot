@@ -1,5 +1,6 @@
 *** Settings ***
 Library     RobotDebug
+Suite Setup     debug
 
 *** Test Cases ***
 test1

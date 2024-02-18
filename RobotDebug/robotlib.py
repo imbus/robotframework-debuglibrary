@@ -1,3 +1,4 @@
+from copy import deepcopy
 from robot.libdocpkg.model import LibraryDoc
 from robot.libdocpkg.robotbuilder import (
     KeywordDocBuilder,
@@ -44,7 +45,7 @@ class ImportedResourceDocBuilder(ResourceDocBuilder):
             type="RESOURCE",
             scope="GLOBAL",
         )
-        libdoc.keywords = KeywordDocBuilder().build_keywords(resource)
+        libdoc.keywords = KeywordDocBuilder().build_keywords(deepcopy(resource))
         return libdoc
 
 
