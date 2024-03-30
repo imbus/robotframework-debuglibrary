@@ -3,12 +3,12 @@ target-version = ['py37']
 line-length = 100
 
 [tool.ruff]
-unfixable = []
+lint.unfixable = []
 exclude = [
   "__pycache__",
   "tests/"
 ]
-ignore = [
+lint.ignore = [
   "B008",  # do not perform function calls in argument defaults
   "E501",  # line too long
   "N815",  # mixedCase variable in class scope
@@ -19,7 +19,7 @@ ignore = [
   "PLR0913",  # too many arguments
 ]
 target-version = "py37"
-select = [
+lint.select = [
   "E",
   "F",
   "W",

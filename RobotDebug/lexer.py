@@ -50,8 +50,7 @@ def get_variable_token(token_list):
             var_tokens = list(token.tokenize_variables())
         except Exception:
             var_tokens = [token]
-        for v_token in var_tokens:
-            yield v_token
+        yield from var_tokens
 
 
 class RobotFrameworkLocalLexer(Lexer):

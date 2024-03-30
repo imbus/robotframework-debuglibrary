@@ -136,10 +136,14 @@ def get_history_content(his, pure_commands: bool = True):
             [
                 e
                 for e in dict.fromkeys(
-                    reversed([re.sub(r" {2,}", " " * 4, v).strip() for v in his.get_strings()])
+                    reversed(
+                        [
+                            re.sub(r"(?:(?<![\n ])(?:[ \t]{2,}|\t))", " " * 4, v).strip()
+                            for v in his.get_strings()
+                        ]
+                    )
                 )
-                if (not HEADER_MATCHER.match(e) and pure_commands)
-                or (HEADER_MATCHER.match(e) and not pure_commands)
+                if bool(HEADER_MATCHER.match(e)) != pure_commands
             ]
         )
     )

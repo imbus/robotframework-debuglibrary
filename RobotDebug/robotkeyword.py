@@ -1,4 +1,3 @@
-import re
 import tempfile
 from pathlib import Path
 from typing import Iterator, List, Tuple
@@ -14,9 +13,8 @@ except ImportError:
     from robot.running import ResourceFile
 from robot.variables.search import is_variable
 
+from .globals import KEYWORD_SEP
 from .robotlib import ImportedLibraryDocBuilder, ImportedResourceDocBuilder, get_libs
-
-KEYWORD_SEP = re.compile("  +|\t")
 
 _lib_keywords_cache = {}
 _resource_keywords_cache = {}

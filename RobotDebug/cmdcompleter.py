@@ -8,7 +8,7 @@ from prompt_toolkit.document import Document
 from robot.libraries.BuiltIn import BuiltIn
 from robot.parsing.parser.parser import _tokens_to_statements
 
-from .globals import IS_RF_7
+from .globals import IS_RF_7, KEYWORD_SEP
 from .lexer import get_robot_token, get_variable_token
 from .prompttoolkitcmd import PromptToolkitCmd
 from .robotkeyword import normalize_kw
@@ -69,9 +69,16 @@ class StatementInformation:
 
     def _find_token_at_cursor(self):
         for token in self.statement.tokens:
-            if (
-                token.type
-            ):  # in ["KEYWORD", "IF", "FOR", "ELSE", "ELSE IF"]:   TODO: Commented to get all tokens in debug. lets see the impact
+            if token.type in [
+                "KEYWORD",
+                "IF",
+                "FOR",
+                "ELSE",
+                "ELSE IF",
+                "TRY",
+                "WHILE",
+                "VAR",
+            ]:  # TODO: Commented to get all tokens in debug. lets see the impact
                 self.statement_type = token.type
             if (
                 token.lineno == self.cursor_row + 1
@@ -93,6 +100,12 @@ class CmdCompleter(Completer):
         self.helps = helps
         self.libs = libs
         self.keywords = list(keywords)
+        self.keywords_catalog = {}
+        for keyword in self.keywords:
+            self.keywords_catalog[normalize_kw(keyword.name)] = keyword
+            self.keywords_catalog[
+                f"{normalize_kw(keyword.parent.name)}.{normalize_kw(keyword.name)}"
+            ] = keyword
         self.current_statement = None
         for name, display, display_meta in self.get_commands():
             self.names.append(name)
@@ -163,28 +176,28 @@ class CmdCompleter(Completer):
         )
 
     def _get_argument_completer(self, text):
-        for keyword in self.keywords:
-            if normalize_kw(keyword.name) == normalize_kw(
-                self.current_statement.statement.keyword
-            ) or f"{normalize_kw(keyword.parent.name)}.{normalize_kw(keyword.name)}" == normalize_kw(
-                self.current_statement.statement.keyword
-            ):
-                data_tokens = self.current_statement.statement.data_tokens
-                args = keyword.args
-                set_named_args, set_pos_args = self.get_set_args(args, data_tokens)
-                if set_named_args:
-                    yield from self.get_named_arg_completion(args, set_named_args, set_pos_args)
-                else:
-                    yield from self.get_pos_arg_completion(args, set_pos_args)
+        keyword = self.keywords_catalog.get(
+            normalize_kw(self.current_statement.statement.keyword), None
+        )
+        if keyword:
+            data_tokens = self.current_statement.statement.data_tokens
+            args = keyword.args
+            set_named_args, set_pos_args = self.get_set_args(args, data_tokens)
+            if set_named_args:
+                yield from self.get_named_arg_completion(args, set_named_args, set_pos_args)
+            else:
+                yield from self.get_pos_arg_completion(args, set_pos_args)
 
-    def get_pos_arg_completion(self, args, set_pos_args):
+    def get_pos_arg_completion(
+        self, args, set_pos_args
+    ):  # TODO: here is an issue. if more positional args are set, than existing, named_only will be removed from proposal
         for index, arg in enumerate([*args.positional_or_named, *args.named_only]):
             if index + 1 > len(set_pos_args):
-                suffix = "=" if arg in [*args.positional_or_named, *args.named_only] else ""
+                # suffix = "=" if arg in [*args.positional_or_named, *args.named_only] else ""
                 yield Completion(
-                    f"{arg}",
+                    f"{arg}=",
                     0,
-                    display=f"{arg}{suffix}",
+                    display=f"{arg}=",
                     display_meta=str(args.defaults.get(arg, "")),
                 )
 
@@ -338,7 +351,7 @@ class CmdCompleter(Completer):
         ):
             yield from [
                 Completion(
-                    f"{var[:-1]}",
+                    var,
                     -cursor_pos,
                     display=var,
                     display_meta=repr(val),
@@ -365,7 +378,7 @@ class KeywordAutoSuggestion(AutoSuggest):
     def get_suggestion(self, buffer: Buffer, document: Document) -> Union[Suggestion, None]:
         text = document.text
         completions = [compl.text for compl in self.completer.get_completions(document, None)]
-        last_word = text.split("  ")[-1]
+        last_word = KEYWORD_SEP.split(text)[-1]
         matches = [kw for kw in completions if kw.startswith(last_word)]
         matches.extend([kw for kw in completions if kw.lower().startswith(last_word.lower())])
         return Suggestion(matches[0][len(last_word) :] if matches else "")

@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 
 from robot.version import get_version
@@ -25,3 +26,4 @@ class StepMode(str, Enum):
 
 
 IS_RF_7 = int(get_version().split(".", 1)[0]) >= 7  # noqa: PLR2004
+KEYWORD_SEP = re.compile(r"[ \t]{2,}|\t")

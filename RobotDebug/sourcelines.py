@@ -16,7 +16,9 @@ def print_source_lines(style, source_file, lineno, before_and_after=5):
     if not source_file or not lineno:
         return
 
-    Path(source_file).open().readlines()
+    Path(
+        source_file
+    ).open().readlines()  # noqa: SIM115  TODO: not sure why i did this. Maybe to check if file is actually readable...
     prefixed_token = get_pygments_token_from_file(lineno, source_file)
     printable_token = filter_token_by_lineno(
         prefixed_token, lineno - before_and_after, lineno + before_and_after + 1
@@ -28,7 +30,9 @@ def print_test_case_lines(style, source_file, current_lineno):
     if not source_file or not current_lineno:
         return
 
-    Path(source_file).open().readlines()
+    Path(
+        source_file
+    ).open().readlines()  # noqa: SIM115  TODO: not sure why i did this. Maybe to check if file is actually readable...
     prefixed_token = get_pygments_token_from_file(current_lineno, source_file)
     printable_token = filter_token_by_scope(prefixed_token, current_lineno)
     print_pygments_styles(printable_token, style)

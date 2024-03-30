@@ -304,7 +304,7 @@ class BaseCmd(cmd.Cmd):
         if line is None:
             return None
 
-        if line == "exit" or line == "EOF":
+        if line in ["exit", "EOF"]:
             line = "EOF"
             return True
 
