@@ -101,11 +101,11 @@ def base_functional_testing():
 
 def step_functional_testing():
     global child
-    # Command "coverage run robot tests/step.robot" does not work,
+    # Command "coverage run robot tests/robot/step.robot" does not work,
     # so start the program using DebugLibrary's shell instead of "robot".
     child = pexpect.spawn('coverage',
                           ['run', '--append', 'DebugLibrary/shell.py',
-                           'tests/step.robot'])
+                           'tests/robot'])
     child.expect('Type "help" for more information.*>',
                  timeout=TIMEOUT_SECONDS * 3)
 
@@ -114,18 +114,34 @@ def step_functional_testing():
     support_source_lineno = get_version() >= '3.2'
 
     if support_source_lineno:
+
         check_command('s',  # step
-                      '/tests/step.robot.7..*'
+                      '/tests/robot/__init__.robot.10.*'
+                      '-> log to console  __init__ working.*'
+                      '=> BuiltIn.Log To Console  __init__ working'
+                      )
+        check_command('s',  # step
+                      '/tests/robot/__init__.robot.11.*'
+                      '@.* =  Create List    __init__    hello    world.*'
+                      '@.* = BuiltIn.Create List  __init__  hello  world')
+        check_command('n',  # next
+                      '/tests/robot/step.robot.6..*'
+                      '-> debug.*'
+                      '=> DebugLibrary.Debug')
+        check_command('s',  # step
+                      '')
+        check_command('s',  # step
+                      '/tests/robot/step.robot.7..*'
                       '-> log to console  working.*'
                       '=> BuiltIn.Log To Console  working')
         check_command('l',  # list
                       '  7 ->	    log to console  working')
         check_command('n',  # next
-                      '/tests/step.robot.8..*'
+                      '/tests/robot/step.robot.8..*'
                       '@.* =  Create List    hello    world.*'
                       '@.* = BuiltIn.Create List  hello  world')
         check_command('',  # just repeat last command
-                      '/tests/step.robot.11..*'
+                      '/tests/robot/step.robot.11..*'
                       '-> log to console  another test case.*'
                       '=> BuiltIn.Log To Console  another test case')
         check_command('l',  # list

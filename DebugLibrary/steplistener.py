@@ -1,4 +1,5 @@
 import inspect
+import os
 
 from .globals import context
 
@@ -27,6 +28,13 @@ class RobotLibraryStepListenerMixin:
         elif 'lineno' in attrs:
             path = attrs['source']
             lineno = attrs['lineno']
+
+        if path and os.path.isdir(path):
+            # we might be in folder-wide __init__.robot, but listener args are not telling us that
+            # - gives us only the folder path.
+            init_path = os.path.join(path, '__init__.robot')
+            if os.path.exists(init_path):
+                path = init_path
 
         if path:
             lineno_0_based = lineno - 1
