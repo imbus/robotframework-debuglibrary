@@ -40,25 +40,25 @@ You can use this as a library, import `RobotDebug` and call `Debug` keyword in y
         # some else...
         ${count} =  Get Element Count  name:div_name
 
-The test case will be executed until `Debug`, then the interavtive shell will be opened. You can evaluate different expressions in the shell. When you exit the shell, the test steps in the test case after `Debug` are executed.
+The test case will be executed until `Debug`, then the interactive shell will be opened. You can evaluate different expressions in the shell. When you exit the shell, the test steps in the test case after `Debug` are executed.
 
 Or you can run it standalone as a RobotFramework shell.  
-To start type `irobot`:
+To start, type `irobot`:
 
 ![irobot](res\irobot.png)
 
 
 ### Overview of commands
 
-Use `help` to show possible commands:  
+Use `help` to view possible commands:  
 
 ![help](res\help_image.png)
 
-Use `exit`, `EOF` or keys `Ctrl+D` to exit the interactive shell.
+Use `exit` or keys `Ctrl+D` to exit the interactive shell.
 
 Use key `Arrow Right` to autocomplete keywords.
 
-To import library use  `Library    <lib_name>`.  
+To import library, use  `Library    <lib_name>`.  
 The command `libs` lists the imported and built.in libraries and `libs -s` lists the libraries with source:  
 
 ![help library](res/libs_image.png)
@@ -69,7 +69,7 @@ It is also possible to import resource and variable files:
     > Resource    path_to_resource/resource.resource
     > Variables    path_to_variablesfile/variables.py
 
-The command `res` lists the imported resorces files.
+The command `res` lists the imported resources files.
 `res -s` lists the imported resource file with source: 
 
 ![help resource](res/help_res.png)
@@ -77,13 +77,13 @@ The command `res` lists the imported resorces files.
 The command `keywords` or `k` lists all keywords of imported libraries.  
 And the command `keywords <lib_name>` lists keywords of a specified library.
 
-To view the documentation of a keyword use `docs <keyword_name>` or `d <keyword_name>`:
+To view the documentation of a keyword, use `docs <keyword_name>` or `d <keyword_name>`:
 
 ![help docs](res/docs.png)
 
 The history will save at ~/.rfdebug_history in user home directory default or any file defined in environment variable RFDEBUG_HISTORY.
 
-You can use the command `history` or key `F4` to view the history in a shell. You will see used keywords and commands on the left side of a shell and imported resources on the right. Use `TAB` to switch focus from one part to another. To close history press key `F4`.
+You can use the command `history` or key `F4` to view the history in a shell. You will see used keywords and commands on the left side of a shell and imported resources on the right. Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
 
 ![history](res/history.png)
 
@@ -107,7 +107,7 @@ You can write the resource file directly in the shell:
 
 ![resource file](res/resource.png)
 
-`irobot`  can evaluate milti line expressons as `FOR` and `WHILE` loops, `IF / ELSE` statements and `TRY / EXCEPT` expressions.
+`irobot`  can evaluate multi line expressions as `FOR` and `WHILE` loops, `IF / ELSE` statements and `TRY / EXCEPT` expressions.
 
 ![multi line evaluation](res/multiline_example.png)
 
