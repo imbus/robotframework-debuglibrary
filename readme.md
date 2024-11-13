@@ -57,7 +57,7 @@ To start, type `irobot`:
 
 Use `help` to view possible commands:  
 
-![help](res\help_image.png)
+![help](res/help_image.png)
 
 Use `exit` or keys `Ctrl+D` to exit the interactive shell.
 
