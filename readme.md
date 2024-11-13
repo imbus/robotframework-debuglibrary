@@ -3,6 +3,8 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
+    - [Debug keyword](#debug-keyword)
+    - [Irobot shell](#irobot-shell)
     - [Overview of commands](#overview-of-commands)
     - [Single line expression evaluation](#single-line-expression-evaluation)
     - [Multi line expression evaluation](#multi-line-expression-evaluation)
@@ -27,6 +29,7 @@ To install using `pip`:
 
 ## Usage
 
+### Debug keyword
 You can use this as a library, import `RobotDebug` and call `Debug` keyword in your test files like this:
 
 
@@ -38,12 +41,13 @@ You can use this as a library, import `RobotDebug` and call `Debug` keyword in y
         # some keywords...
         Debug
         # some else...
-        ${count} =  Get Element Count  name:div_name
 
-The test case will be executed until `Debug`, then the interactive shell will be opened. You can evaluate different expressions in the shell. When you exit the shell, the test steps in the test case after `Debug` are executed.
+The test case runs until it hit the line "Debug", which opens an interactive shell. Within the shell you can evaluate different expressions. On exit, it will continue right after `Debug` with the rest of the code.
 
-Or you can run it standalone as a RobotFramework shell.  
-To start, type `irobot`:
+### Irobot shell
+
+Another option is to open RobotFramework shell in standalone mode,
+to start, simply type `irobot`:
 
 ![irobot](res\irobot.png)
 
@@ -58,36 +62,36 @@ Use `exit` or keys `Ctrl+D` to exit the interactive shell.
 
 Use key `Arrow Right` to autocomplete keywords.
 
-To import library, use  `Library    <lib_name>`.  
-The command `libs` lists the imported and built.in libraries and `libs -s` lists the libraries with source:  
-
+To import library, use  `Library    <lib_name>`. 
+To show all imported Libraries, use `libs` and to show sources for each library, use `libs -s`.
+ 
 ![help library](res/libs_image.png)
 
-It is also possible to import resource and variable files:
-
+It is possible to import resource and variable files:
 
     > Resource    path_to_resource/resource.resource
     > Variables    path_to_variablesfile/variables.py
 
 The command `res` lists the imported resources files.
-`res -s` lists the imported resource file with source: 
+`res -s` lists the imported resources files with source: 
 
 ![help resource](res/help_res.png)
 
 The command `keywords` or `k` lists all keywords of imported libraries.  
 And the command `keywords <lib_name>` lists keywords of a specified library.
 
-To view the documentation of a keyword, use `docs <keyword_name>` or `d <keyword_name>`:
+To get keyword documentation for individual keywords, use `docs <keyword_name>` or `d <keyword_name>`: 
 
 ![help docs](res/docs.png)
 
-The history will save at ~/.rfdebug_history in user home directory default or any file defined in environment variable RFDEBUG_HISTORY.
+The history be saved at `~/.rfdebug_history` located in user home directory default or any path defined in environment variable RFDEBUG_HISTORY.
 
-You can use the command `history` or key `F4` to view the history in a shell. You will see used keywords and commands on the left side of a shell and imported resources on the right. Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
+You can use the command `history` or key `F4` to view the history in your active shell. You can see used keywords and commands on the left and imported resources on the right side.  
+Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
 
 ![history](res/history.png)
 
-Using key `F5` you can activate or deactivate live completion.
+With key `F5` you can activate or deactivate live completion.
 
 Live completion ON:
 
@@ -97,13 +101,13 @@ Live completion ON:
 
 ### Single line expression evaluation
 
-You can execute command and define variables:  
+You can execute commands and define variables:  
 
 ![single line evaluation](res/singleline_example.png)
 
 ### Multi line expression evaluation  
 
-You can write the resource file directly in the shell:
+You can write the resource file directly into the shell:
 
 ![resource file](res/resource.png)
 
@@ -113,7 +117,26 @@ You can write the resource file directly in the shell:
 
 ### Step debugging
 
-TODO
+If you use RobotDebug as a library, you can use keys *F7 (INTO)*, *F8 (OVER)* and *F9 (OUT)* to trace and view the code step by step.
+
+*F7: INTO*  
+With key `F7` you can go into the keyword, if it contains other keywords inside. The first line inside the user keyword is executed and the execution is paused again.
+
+*F8: OVER*  
+With `F8` the current line is executed completely in one step, even if it contains other keywords inside.
+
+*F9: OUT*  
+With `F9` you can exit the keyword, if you went into it previously.
+
+*F10: CONTINUE*  
+With `F10` or command `continue` you can continue the execution until next `Debug` keyword.
+
+*SHIFT TAB: DETACH*  
+`Shift Tab` allows you to run the rest of the test case to the end and ingnores `Debug` keyword.
+
+*List*  
+The command `list` or `l` displays the test case snippet including the line being executed:  
+![list command](res/list_command.png)
 
 ## Submitting issues
 
