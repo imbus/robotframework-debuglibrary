@@ -9,6 +9,7 @@
     - [Single line expression evaluation](#single-line-expression-evaluation)
     - [Multi line expression evaluation](#multi-line-expression-evaluation)
     - [Step debugging](#step-debugging)
+    - [RobotDebug.Listener](#RobotDebug.Listener)
 - [Submitting issues](#submitting-issues)
 - [Development](#development)
 - [License](#license)
@@ -42,12 +43,12 @@ You can use this as a library, import `RobotDebug` and call `Debug` keyword in y
         Debug
         # some else...
 
-The test case runs until it hit the line "Debug", which opens an interactive shell. Within the shell you can evaluate different expressions. On exit, it will continue right after `Debug` with the rest of the code.
+`Debug` keyword pauses the test execution and opens an interactive shell. Within the shell you can evaluate expressions, inspect the variables and keywords. See also the section [step debugging](#step-debugging).
 
 ### Irobot shell
 
-Another option is to open RobotFramework shell in standalone mode,
-to start, simply type `irobot`:
+Another option is to open an interactive shell in standalone mode.
+To start, type `irobot`:
 
 ![irobot](res\irobot.png)
 
@@ -59,8 +60,6 @@ Use `help` to view possible commands:
 ![help](res\help_image.png)
 
 Use `exit` or keys `Ctrl+D` to exit the interactive shell.
-
-Use key `Arrow Right` to autocomplete keywords.
 
 To import library, use  `Library    <lib_name>`. 
 To show all imported Libraries, use `libs` and to show sources for each library, use `libs -s`.
@@ -86,16 +85,19 @@ To get keyword documentation for individual keywords, use `docs <keyword_name>` 
 
 The history be saved at `~/.rfdebug_history` located in user home directory default or any path defined in environment variable RFDEBUG_HISTORY.
 
-You can use the command `history` or key `F4` to view the history in your active shell. You can see used keywords and commands on the left and imported resources on the right side.  
+You can use the command `history` or key `F4` to view the history in your irobot shell. You can see used keywords and commands on the left and imported resources on the right side.  
 Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
 
 ![history](res/history.png)
 
-With key `F5` you can activate or deactivate live completion.
+The interactive shell support auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feeling it.   
+You can use the `F5` key to enable or disable live completion.
 
 Live completion ON:
 
 ![live completion](res/live_completion.gif)
+
+You can use the `F12` key to enable or disable mouse support within shell.
 
 `irobot` accept any robot arguments, but by default, `rfdebug` disabled all logs with `-l None -x None -o None -L None -r None`.
 
@@ -117,19 +119,19 @@ You can write the resource file directly into the shell:
 
 ### Step debugging
 
-If you use RobotDebug as a library, you can use keys *F7 (INTO)*, *F8 (OVER)* and *F9 (OUT)* to trace and view the code step by step.
+If you use RobotDebug as a library with `Debug` keyword, you can use keys *F7 (INTO)*, *F8 (OVER)* and *F9 (OUT)* to trace and view the code step by step.
 
 *F7: INTO*  
-With key `F7` you can go into the keyword, if it contains other keywords inside. The first line inside the user keyword is executed and the execution is paused again.
+The `F7` key allows you to go into the keyword if it contains further keywords inside. The first line within the user keyword is executed and the execution is paused again.
 
 *F8: OVER*  
-With `F8` the current line is executed completely in one step, even if it contains other keywords inside.
+The `F8` key allows you to execute the current line completely in one step, even if it contains other keywords inside.
 
 *F9: OUT*  
-With `F9` you can exit the keyword, if you went into it previously.
+You can use the `F9` key to exit the keyword if you have entered it previously.
 
 *F10: CONTINUE*  
-With `F10` or command `continue` you can continue the execution until next `Debug` keyword.
+You can use the `F10` key or the `continue` command to continue execution until the next `Debug` keyword.
 
 *SHIFT TAB: DETACH*  
 `Shift Tab` allows you to run the rest of the test case to the end and ingnores `Debug` keyword.
@@ -137,6 +139,14 @@ With `F10` or command `continue` you can continue the execution until next `Debu
 *List*  
 The command `list` or `l` displays the test case snippet including the line being executed:  
 ![list command](res/list_command.png)
+
+### RobotDebug.Listener
+
+You can start your test cases with RobotDebug.Listener:
+
+    robot --listener RobotDebug.Listener some.robot
+
+The listener listens to the failure. If the test case fails, the interactive shell is opened at this point.  
 
 ## Submitting issues
 
