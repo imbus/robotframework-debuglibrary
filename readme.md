@@ -3,24 +3,21 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Debug keyword](#debug-keyword)
-    - [Irobot shell](#irobot-shell)
-    - [Overview of commands](#overview-of-commands)
-    - [Single line expression evaluation](#single-line-expression-evaluation)
-    - [Multi line expression evaluation](#multi-line-expression-evaluation)
+    - [REPL mode](#repl-mode)
+    - [Library mode](#library-mode)
+    - [Listener mode](#listener-mode)
     - [Step debugging](#step-debugging)
-    - [RobotDebug.Listener](#RobotDebug.Listener)
+- [Overview of commands](#overview-of-commands)
 - [Submitting issues](#submitting-issues)
 - [Development](#development)
 - [License](#license)
 
 ## Introduction
 
-This Library is a Fork by René Rohner from the original robotframework-debuglibrary by Xie Yanbo
-
+This library is a Fork by René Rohner from the original robotframework-debuglibrary by Xie Yanbo.
 
 Robotframework-RobotDebug is a debug library for [RobotFramework](https://robotframework.org),
-which can be used as an interactive shell(REPL) also.
+which can be used as an interactive shell(REPL) and listener also.
 
 ## Installation
 
@@ -30,8 +27,39 @@ To install using `pip`:
 
 ## Usage
 
-### Debug keyword
-You can use this as a library, import `RobotDebug` and call `Debug` keyword in your test files like this:
+You can use RobotDebug library in 3 different modes:  
+- REPL mode,  
+- Library mode,  
+- Listener mode.  
+
+### REPL mode
+
+Just call `irobot` in terminal with all available robot arguments. An interactive shell will open. To exit use command `exit` or shortcut `Ctrl+D`.    
+It is possible to evaluate both single-line and multi-line expressions. 
+
+- you can execute keywords and define variables
+
+![keywords and variables](res/keywords_and_variables_irobot.png)
+
+- You can set a variable and use this variable in another keyword in one step. Use the keyboard shortcut `Shift + Down Arrow` to go to the next line without evaluating first line. Then press the `Enter` key twice to evaluate expressions.
+
+![two lines evaluation](res/Shift_down.gif)
+
+- `irobot` can evaluate multi line expressions as `FOR` and `WHILE` loops, `IF / ELSE` statements and `TRY / EXCEPT` expressions.
+
+![multi line evaluation](res/multiline_example.png)
+
+- you can import libraries, resource and variable files
+
+![import library, resource and variable file](res/import.png) 
+
+- you can use the resource file syntax like `*** Settings *** `, `*** Variables ***` and `*** Keywords ***` and write the resource file directly into the irobot shell. Press the `Enter` key twice to import your resource.
+
+![resource file](res/resource.png)
+
+### Library mode
+
+Import `RobotDebug` as library and use the `Debug` keyword to set a break point in your test cases:
 
 
     *** Settings ***
@@ -43,33 +71,75 @@ You can use this as a library, import `RobotDebug` and call `Debug` keyword in y
         Debug
         # some else...
 
-`Debug` keyword pauses the test execution and opens an interactive shell. Within the shell you can evaluate expressions, inspect the variables and keywords. See also the section [step debugging](#step-debugging).
+The `Debug` keyword pauses test execution and opens an interactive shell. Then you can evaluate expressions, try out keywords and inspect the variables and keywords. 
 
-### Irobot shell
+### Listener mode
 
-Another option is to open an interactive shell in standalone mode.
-To start, type `irobot`:
+You can attach it as listener and run you test until it fails. Just add `--listener RobotDebug.Listener` to you `robot` call.
 
-![irobot](res\irobot.png)
+    robot --listener RobotDebug.Listener some.robot
 
+If your test case fails, RobotDebug will stop there and the interactive shell will be opened at that point. Then you can try out keywords and analyse the issue.
 
+Video Rene
+
+### Step debugging
+
+RobotDebug supports step debugging in Library and Listner mode.  
+
+Use keys *F7 (INTO)*, *F8 (OVER)* and *F9 (OUT)* to trace and view the code step by step.
+
+*F7: INTO*  
+The `F7` key allows you to go into the keyword if it contains further keywords inside. The first line within the user keyword is executed and the execution is paused again.
+
+*F8: OVER*  
+The `F8` key allows you to execute the current line completely in one step, even if it contains other keywords inside.
+
+*F9: OUT*  
+You can use the `F9` key to exit the keyword if you have entered it previously.
+
+*F10: CONTINUE*  
+You can use the `F10` key or the `continue` command to continue execution until the next `Debug` keyword if you use this in library mode or the next failure of the test if you use this in listner mode.
+
+*SHIFT TAB: DETACH*  
+`Shift Tab` allows you to run the rest of the test case to the end without opening interactive shell.
+
+*List*  
+The commands `list` or `l` and `ll` display the test case snippet including the line being executed:  
+![list command](res/list_command.png)
+ 
 ### Overview of commands
+
+Use `exit` or keys `Ctrl+D` to exit the interactive shell.
+
+The interactive shell support auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feeling it.   
+
+You can use the `F5` key to enable or disable live completion.  
+Live completion ON:  
+![live completion](res/live_completion.gif)
+
+You can use the `F12` key to enable or disable mouse support within shell.  
+Mouse support ON:  
+![toglle mouse on](res/toggle_mouse_on.gif)  
+To be able to scroll, disable mouse support.
+
+You can use the command `history` or key `F4` to view the history in your irobot shell. You can see used keywords and commands on the left and imported resources on the right side.  
+Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
+
+history video 
+
+The history will save at `~/.rfdebug_history` located in user home directory default or any path defined in environment variable RFDEBUG_HISTORY.
 
 Use `help` to view possible commands:  
 
 ![help](res/help_image.png)
 
-Use `exit` or keys `Ctrl+D` to exit the interactive shell.
+
 
 To import library, use  `Library    <lib_name>`. 
 To show all imported Libraries, use `libs` and to show sources for each library, use `libs -s`.
  
 ![help library](res/libs_image.png)
-
-It is possible to import resource and variable files:
-
-    > Resource    path_to_resource/resource.resource
-    > Variables    path_to_variablesfile/variables.py
 
 The command `res` lists the imported resources files.
 `res -s` lists the imported resources files with source: 
@@ -83,70 +153,6 @@ To get keyword documentation for individual keywords, use `docs <keyword_name>` 
 
 ![help docs](res/docs.png)
 
-The history be saved at `~/.rfdebug_history` located in user home directory default or any path defined in environment variable RFDEBUG_HISTORY.
-
-You can use the command `history` or key `F4` to view the history in your irobot shell. You can see used keywords and commands on the left and imported resources on the right side.  
-Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
-
-![history](res/history.png)
-
-The interactive shell support auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feeling it.   
-You can use the `F5` key to enable or disable live completion.
-
-Live completion ON:
-
-![live completion](res/live_completion.gif)
-
-You can use the `F12` key to enable or disable mouse support within shell.
-
-`irobot` accept any robot arguments, but by default, `rfdebug` disabled all logs with `-l None -x None -o None -L None -r None`.
-
-### Single line expression evaluation
-
-You can execute commands and define variables:  
-
-![single line evaluation](res/singleline_example.png)
-
-### Multi line expression evaluation  
-
-You can write the resource file directly into the shell:
-
-![resource file](res/resource.png)
-
-`irobot`  can evaluate multi line expressions as `FOR` and `WHILE` loops, `IF / ELSE` statements and `TRY / EXCEPT` expressions.
-
-![multi line evaluation](res/multiline_example.png)
-
-### Step debugging
-
-If you use RobotDebug as a library with `Debug` keyword, you can use keys *F7 (INTO)*, *F8 (OVER)* and *F9 (OUT)* to trace and view the code step by step.
-
-*F7: INTO*  
-The `F7` key allows you to go into the keyword if it contains further keywords inside. The first line within the user keyword is executed and the execution is paused again.
-
-*F8: OVER*  
-The `F8` key allows you to execute the current line completely in one step, even if it contains other keywords inside.
-
-*F9: OUT*  
-You can use the `F9` key to exit the keyword if you have entered it previously.
-
-*F10: CONTINUE*  
-You can use the `F10` key or the `continue` command to continue execution until the next `Debug` keyword.
-
-*SHIFT TAB: DETACH*  
-`Shift Tab` allows you to run the rest of the test case to the end and ingnores `Debug` keyword.
-
-*List*  
-The command `list` or `l` displays the test case snippet including the line being executed:  
-![list command](res/list_command.png)
-
-### RobotDebug.Listener
-
-You can start your test cases with RobotDebug.Listener:
-
-    robot --listener RobotDebug.Listener some.robot
-
-The listener listens to the failure. If the test case fails, the interactive shell is opened at this point.  
 
 ## Submitting issues
 
