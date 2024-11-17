@@ -14,7 +14,7 @@
 
 ## Introduction
 
-This library is a Fork by René Rohner from the original robotframework-debuglibrary by Xie Yanbo.
+This library is a fork by René Rohner from the original robotframework-debuglibrary by Xie Yanbo.
 
 Robotframework-RobotDebug is a debug library for [RobotFramework](https://robotframework.org),
 which can be used as an interactive shell(REPL) and listener also.
