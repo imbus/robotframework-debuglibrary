@@ -34,14 +34,14 @@ You can use RobotDebug library in 3 different modes:
 
 ### REPL mode
 
-Just call `irobot` in terminal with all available robot arguments. An interactive shell will open. To exit use command `exit` or shortcut `Ctrl+D`.    
+Just call `irobot` in the terminal with all available robot arguments. An interactive shell will open. To exit use the command `exit` or shortcut `Ctrl+D`.    
 It is possible to evaluate both single-line and multi-line expressions. 
 
 - you can execute keywords and define variables
 
 ![keywords and variables](res/keywords_and_variables_irobot.png)
 
-- You can set a variable and use this variable in another keyword in one step. Use the keyboard shortcut `Shift + Down Arrow` to go to the next line without evaluating first line. Then press the `Enter` key twice to evaluate expressions.
+- You can set a variable and use this variable in another keyword in one step. Use the keyboard shortcut `Shift + Down Arrow` to go to the next line without evaluating the first line. Then press the `Enter` key twice to evaluate expressions.
 
 ![two lines evaluation](res/Shift_down.gif)
 
@@ -49,7 +49,7 @@ It is possible to evaluate both single-line and multi-line expressions.
 
 ![multi line evaluation](res/multiline_example.png)
 
-- you can import libraries, resource and variable files
+- you can import libraries, resources and variable files
 
 ![import library, resource and variable file](res/import.png) 
 
@@ -59,7 +59,7 @@ It is possible to evaluate both single-line and multi-line expressions.
 
 ### Library mode
 
-Import `RobotDebug` as library and use the `Debug` keyword to set a break point in your test cases:
+Import `RobotDebug` as library and use the `Debug` keyword to set a breakpoint in your test cases:
 
 
     *** Settings ***
@@ -75,13 +75,13 @@ The `Debug` keyword pauses test execution and opens an interactive shell. Then y
 
 ### Listener mode
 
-You can attach it as listener and run you test until it fails. Just add `--listener RobotDebug.Listener` to you `robot` call.
+You can attach it as a listener and run your test until it fails. Just add `--listener RobotDebug.Listener` to you `robot` call.
 
     robot --listener RobotDebug.Listener some.robot
 
-If your test case fails, RobotDebug will stop there and the interactive shell will be opened at that point. Then you can try out keywords and analyse the issue.
+If your test case fails, RobotDebug will stop there and the interactive shell will be opened at that point. Then you can try out keywords and analyze the issue.
 
-Video Rene
+https://github.com/user-attachments/assets/18c48b1c-e870-45fd-ad67-f0424e88f172
 
 ### Step debugging
 
@@ -102,7 +102,7 @@ You can use the `F9` key to exit the keyword if you have entered it previously.
 You can use the `F10` key or the `continue` command to continue execution until the next `Debug` keyword if you use this in library mode or the next failure of the test if you use this in listner mode.
 
 *SHIFT TAB: DETACH*  
-`Shift Tab` allows you to run the rest of the test case to the end without opening interactive shell.
+`Shift Tab` allows you to run the rest of the test case to the end without opening the interactive shell.
 
 *List*  
 The commands `list` or `l` and `ll` display the test case snippet including the line being executed:  
@@ -112,13 +112,13 @@ The commands `list` or `l` and `ll` display the test case snippet including the 
 
 Use `exit` or keys `Ctrl+D` to exit the interactive shell.
 
-The interactive shell support auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feeling it.   
+The interactive shell supports auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feel it.   
 
 You can use the `F5` key to enable or disable live completion.  
 Live completion ON:  
 ![live completion](res/live_completion.gif)
 
-You can use the `F12` key to enable or disable mouse support within shell.  
+You can use the `F12` key to enable or disable mouse support within the shell.  
 Mouse support ON:  
 ![toglle mouse on](res/toggle_mouse_on.gif)  
 To be able to scroll, disable mouse support.
@@ -126,9 +126,9 @@ To be able to scroll, disable mouse support.
 You can use the command `history` or key `F4` to view the history in your irobot shell. You can see used keywords and commands on the left and imported resources on the right side.  
 Use `TAB` to switch focus from one part to another. To close history, press key `F4`.
 
-history video 
+https://github.com/user-attachments/assets/cfa2b7c7-a2eb-4063-b1c4-30bff48da850
 
-The history will save at `~/.rfdebug_history` located in user home directory default or any path defined in environment variable RFDEBUG_HISTORY.
+The history will save at `~/.rfdebug_history` located in user home directory default or any path defined in the environment variable RFDEBUG_HISTORY.
 
 Use `help` to view possible commands:  
 
@@ -136,18 +136,18 @@ Use `help` to view possible commands:
 
 
 
-To import library, use  `Library    <lib_name>`. 
+To import a library, use  `Library    <lib_name>`. 
 To show all imported Libraries, use `libs` and to show sources for each library, use `libs -s`.
  
 ![help library](res/libs_image.png)
 
-The command `res` lists the imported resources files.
+The command `res` lists the imported resource files.
 `res -s` lists the imported resources files with source: 
 
 ![help resource](res/help_res.png)
 
 The command `keywords` or `k` lists all keywords of imported libraries.  
-And the command `keywords <lib_name>` lists keywords of a specified library.
+The command `keywords <lib_name>` lists keywords of a specified library.
 
 To get keyword documentation for individual keywords, use `docs <keyword_name>` or `d <keyword_name>`: 
 
@@ -158,7 +158,7 @@ To get keyword documentation for individual keywords, use `docs <keyword_name>` 
 
 Bugs and enhancements are tracked in the [issue tracker](https://github.com/imbus/robotframework-debug/issues).
 
-Before submitting a new issue, it is always a good idea to check is the same bug or enhancement already reported. If it is, please add your comments to the existing issue instead of creating a new one.
+Before submitting a new issue, it is always a good idea to check if the same bug or enhancement already been reported. If it is, please add your comments to the existing issue instead of creating a new one.
 
 ## Development
 
