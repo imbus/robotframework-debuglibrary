@@ -134,8 +134,6 @@ Use `help` to view possible commands:
 
 ![help](res/help_image.png)
 
-
-
 To import a library, use  `Library    <lib_name>`. 
 To show all imported Libraries, use `libs` and to show sources for each library, use `libs -s`.
  
@@ -152,7 +150,6 @@ The command `keywords <lib_name>` lists keywords of a specified library.
 To get keyword documentation for individual keywords, use `docs <keyword_name>` or `d <keyword_name>`: 
 
 ![help docs](res/docs.png)
-
 
 ## Submitting issues
 
