@@ -141,7 +141,7 @@ Access https://github.com/imbus/robotframework-debug for more details.\
             self._print_lib_info(lib, with_source_path="-s" in args)
 
     def do_res(self, args):
-        """Print imported and builtin libraries, with source if `-s` specified."""
+        """Print imported resources, with source if `-s` specified."""
         print_output("<", "Imported resources:")
         for lib in get_resources():
             self._print_lib_info(lib, with_source_path="-s" in args)
