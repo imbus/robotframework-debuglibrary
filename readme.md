@@ -37,6 +37,8 @@ You can use RobotDebug library in 3 different modes:
 Just call `irobot` in the terminal with all available robot arguments. An interactive shell will open. To exit use the command `exit` or shortcut `Ctrl+D`.    
 It is possible to evaluate both single-line and multi-line expressions. 
 
+![irobot](res/irobot.png)
+
 - you can execute keywords and define variables
 
 ![keywords and variables](res/keywords_and_variables_irobot.png)
@@ -71,7 +73,7 @@ Import `RobotDebug` as library and use the `Debug` keyword to set a breakpoint i
         Debug
         # some else...
 
-The `Debug` keyword pauses test execution and opens an interactive shell. Then you can evaluate expressions, try out keywords and inspect the variables and keywords. 
+The `Debug` keyword pauses test execution and opens an interactive shell. Then you can evaluate expressions, try out keywords, inspect the variables and trace and view the code step by step. See also the section [step debugging](#step-debugging).
 
 ### Listener mode
 
@@ -99,7 +101,7 @@ The `F8` key allows you to execute the current line completely in one step, even
 You can use the `F9` key to exit the keyword if you have entered it previously.
 
 *F10: CONTINUE*  
-You can use the `F10` key or the `continue` command to continue execution until the next `Debug` keyword if you use this in library mode or the next failure of the test if you use this in listner mode.
+You can use the `F10` key or the `continue` or `c` command to continue execution until the next `Debug` keyword if you use this in library mode or the next failure of the test if you use this in listner mode.
 
 *SHIFT TAB: DETACH*  
 `Shift Tab` allows you to run the rest of the test case to the end without opening the interactive shell.
@@ -111,6 +113,8 @@ The commands `list` or `l` and `ll` display the test case snippet including the 
 ### Overview of commands
 
 Use `exit` or keys `Ctrl+D` to exit the interactive shell.
+
+Use `clear` or `cls` to clear the screen.
 
 The interactive shell supports auto-completion for robotframework keywords and commands. Try input BuiltIn. then hit `Control + Space` key to feel it.   
 
