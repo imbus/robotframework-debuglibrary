@@ -123,12 +123,57 @@ class RobotDebug:
         self.current_source_path = ""
 
     def Library(self, name, *args):  # noqa: N802
+        """Imports a library with the given name and optional arguments.
+
+        This keyword supports importing libraries both using library
+        names and physical paths. When paths are used, they must be
+        given in absolute format or found from
+        [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|
+        search path]. Forward slashes can be used as path separators in all
+        operating systems.
+
+        It is possible to pass arguments to the imported library and also
+        named argument syntax works if the library supports it. ``AS``
+        syntax can be used to give a custom name to the imported library.
+
+        Examples:
+        | Import Library | MyLibrary   |
+        | Import Library | path/Lib.py | arg1 | named=arg2 | AS | Custom |
+        """
         BuiltIn().import_library(name, *args)
 
     def Resource(self, path):  # noqa: N802
+        """Imports a resource file with the given path.
+
+        The given path must be absolute or found from
+        [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|search path].
+        Forward slashes can be used as path separator regardless
+        the operating system.
+
+        Examples:
+        | Import Resource | path/resource.txt |
+        | Import Resource | path/../resources/resource.html |
+        | Import Resource | found_from_pythonpath.robot |
+        """
+
         BuiltIn().import_resource(path)
 
     def Variables(self, path, *args):  # noqa: N802
+        """Imports a variable file with the given path and optional arguments.
+
+        These variables override possible existing variables with
+        the same names. 
+
+        The given path must be absolute or found from
+        [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html##module-search-path|search path].
+        Forward slashes can be used as path separator regardless
+        the operating system.
+
+        Examples:
+        | Import Variables | path/variables.py        |      |      |
+        | Import Variables | path/../vars/env.py      | arg1 | arg2 |
+        | Import Variables | file_from_pythonpath.py  |      |      |
+        """
         BuiltIn().import_variables(path, *args)
 
     def debug(self):
