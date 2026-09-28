@@ -1,3 +1,4 @@
+from inspect import signature
 from robot.libdocpkg.model import LibraryDoc
 from robot.libdocpkg.robotbuilder import KeywordDocBuilder, LibraryDocBuilder
 from robot.libraries import STDLIBS
@@ -27,12 +28,15 @@ def match_libs(name=''):
 
 
 class ImportedLibraryDocBuilder(LibraryDocBuilder):
+    def __init__(self):
+        # Base class requires doc_format since RF 7.5; don't remove.
+        self.doc_format = None
 
     def build(self, lib):
         libdoc = LibraryDoc(
             name=lib.name,
             doc=self._get_doc(lib),
-            doc_format=lib.doc_format,
+            doc_format=self.doc_format
         )
         libdoc.inits = self._get_initializers(lib)
         libdoc.keywords = KeywordDocBuilder().build_keywords(lib)
